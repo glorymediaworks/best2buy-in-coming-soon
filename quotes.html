@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quote Designer | Best2Buy</title>
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1e3a8a">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="quotes.css">
+</head><body>
+  <header class="app-header"><a href="index.html" aria-label="Best2Buy home"><img src="Logo 1.png" alt="Best2Buy — Create. Connect. Grow."></a><div><span>INTERNAL TOOL</span><strong>Quote Designer</strong></div></header>
+  <main class="workspace">
+    <section class="editor" aria-labelledby="editor-title">
+      <div class="editor-heading"><div><p class="eyebrow">CREATE A QUOTE</p><h1 id="editor-title">Product requirements</h1></div><button class="button ghost" id="reset-button" type="button">Reset</button></div>
+      <div class="panel">
+        <h2>Quote details</h2>
+        <div class="fields two"><label>Customer / Company<input id="customer" type="text" placeholder="Customer name"></label><label>Quote number<input id="quote-number" type="text"></label><label>Date<input id="quote-date" type="date"></label><label>Valid until<input id="valid-until" type="date"></label></div>
+        <label>Requirement summary<textarea id="summary" rows="3" placeholder="Briefly describe the overall requirement..."></textarea></label>
+      </div>
+      <div class="items-heading"><div><h2>Product details</h2><p>Add products, specifications and optional reference pictures.</p></div><button class="button add" id="add-item" type="button">+ Add product</button></div>
+      <div id="items" class="items"></div>
+      <div class="panel notes-panel"><h2>Terms / Notes</h2><textarea id="terms" rows="4" placeholder="Production time, delivery, payment terms or other notes...">Final pricing may vary after artwork, material and quantity confirmation. Production begins after approval.</textarea></div>
+      <button class="button download mobile-download" id="download-mobile" type="button">Download quote as JPEG ↓</button>
+    </section>
+    <aside class="preview-panel"><div class="preview-toolbar"><div><span>LIVE PREVIEW</span><b>JPEG · High quality</b></div><button class="button download" id="download" type="button">Download JPEG ↓</button></div><div class="canvas-shell"><canvas id="quote-canvas" width="1240" height="1754" aria-label="Live preview of quotation"></canvas></div><p class="privacy">Reference images stay on this device and are only added to your downloaded quote.</p></aside>
+  </main>
+  <template id="item-template"><article class="item-card"><div class="item-title"><span class="item-number"></span><h3>Product</h3><button class="remove-item" type="button" aria-label="Remove product">Remove</button></div><div class="fields two"><label>Product name<input data-field="name" type="text" placeholder="e.g. Business Cards"></label><label>Quantity<input data-field="qty" type="text" placeholder="e.g. 500 pcs"></label><label>Size / Dimensions<input data-field="size" type="text" placeholder="e.g. 90 × 54 mm"></label><label>Material / Finish<input data-field="material" type="text" placeholder="e.g. 350 GSM, matte laminated"></label><label class="full">Product details<textarea data-field="details" rows="3" placeholder="Colours, sides, customisation, finishing and other specifications..."></textarea></label></div><label class="upload-zone"><input data-field="image" type="file" accept="image/png,image/jpeg,image/webp"><span class="upload-icon">＋</span><span><b>Add reference picture</b><small>PNG, JPG or WEBP</small></span><img class="image-preview" alt="Uploaded reference preview"><button class="clear-image" type="button">Remove image</button></label></article></template>
+  <script src="quotes.js" defer></script>
+</body></html>
