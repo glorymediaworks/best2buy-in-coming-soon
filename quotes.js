@@ -35,3 +35,49 @@ renderQuote=async function(){
   text('GRAND TOTAL',875,y+58,11,800,'#b9c8f4');
   text(formatMoney(grandTotal),1120,y+88,28,800,'#fff','right');
 };
+let professionalRendering=false;
+renderQuote=async function(){
+  if(professionalRendering)return;
+  professionalRendering=true;
+  const products=getItems(),rowHeight=190,totalHeight=Math.max(1754,760+products.length*rowHeight+430);
+  canvas.width=1240;canvas.height=totalHeight;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#1e3a8a';ctx.fillRect(0,0,canvas.width,18);
+  if(logo.complete&&logo.naturalWidth)ctx.drawImage(logo,70,58,410,137);
+  text('QUOTATION',1170,72,38,800,'#1e3a8a','right');
+  text(fields.number.value||'QUOTE NUMBER',1170,122,17,700,'#596273','right');
+  text('CREATE. CONNECT. GROW.',1170,157,12,700,'#1e3a8a','right');
+  ctx.strokeStyle='#dfe3eb';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(70,225);ctx.lineTo(1170,225);ctx.stroke();
+  text('QUOTE FOR',70,270,12,800,'#1e3a8a');text(fields.customer.value||'Customer / Company',70,298,30,700);
+  text('QUOTE DATE',825,270,11,800,'#687080');text(formatDate(fields.date.value),825,294,17,600);
+  text('EXPIRY DATE',1030,270,11,800,'#687080');text(formatDate(fields.valid.value),1030,294,17,600);
+  if(fields.summary.value){text('PROJECT / REQUIREMENT',70,365,11,800,'#687080');wrapText(fields.summary.value,70,389,1100,25,3,18,400,'#3e4756')}
+  const tableY=fields.summary.value?485:385;
+  roundedRect(70,tableY,1100,56,7,'#1e3a8a');
+  text('#',98,tableY+19,12,800,'#fff');text('ITEM & DESCRIPTION',145,tableY+19,12,800,'#fff');text('QTY',780,tableY+19,12,800,'#fff','right');text('RATE',965,tableY+19,12,800,'#fff','right');text('AMOUNT',1140,tableY+19,12,800,'#fff','right');
+  let y=tableY+56;
+  for(let index=0;index<products.length;index++){
+    const product=products[index],image=await loadImage(product.image);
+    ctx.fillStyle=index%2?'#fafbfc':'#fff';ctx.fillRect(70,y,1100,rowHeight);
+    ctx.strokeStyle='#dfe3eb';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(70,y+rowHeight);ctx.lineTo(1170,y+rowHeight);ctx.stroke();
+    text(String(index+1),98,y+28,15,600,'#596273');
+    let contentX=145,contentWidth=570;
+    if(image){coverImage(image,145,y+24,118,118);contentX=285;contentWidth=430}
+    text(product.name||`Product ${index+1}`,contentX,y+24,21,700,'#151922');
+    const specs=[product.size&&`Size: ${product.size}`,product.material&&`Material / Finish: ${product.material}`].filter(Boolean).join('  ·  ');
+    if(specs)wrapText(specs,contentX,y+59,contentWidth,21,2,13,600,'#687080');
+    wrapText(product.details||'Product specifications to be confirmed.',contentX,y+(specs?93:62),contentWidth,22,3,15,400,'#596273');
+    text(String(product.qty),780,y+29,17,600,'#151922','right');text(formatMoney(product.price),965,y+29,17,600,'#151922','right');text(formatMoney(product.total),1140,y+29,18,800,'#1e3a8a','right');
+    y+=rowHeight;
+  }
+  const subtotal=products.reduce((sum,item)=>sum+item.total,0),summaryTop=y+36;
+  text('NOTES & TERMS',70,summaryTop,12,800,'#1e3a8a');wrapText(fields.terms.value||'Final specifications and production schedule are subject to confirmation.',70,summaryTop+29,625,25,5,16,400,'#596273');
+  const totalsX=790;
+  text('Sub Total',totalsX,summaryTop,15,500,'#596273');text(formatMoney(subtotal),1140,summaryTop,16,700,'#151922','right');
+  ctx.strokeStyle='#dfe3eb';ctx.beginPath();ctx.moveTo(totalsX,summaryTop+40);ctx.lineTo(1140,summaryTop+40);ctx.stroke();
+  roundedRect(totalsX,summaryTop+58,350,92,8,'#1e3a8a');text('TOTAL',totalsX+22,summaryTop+83,13,800,'#b9c8f4');text(formatMoney(subtotal),1118,summaryTop+78,26,800,'#fff','right');
+  text('Amount in INR',1140,summaryTop+162,11,500,'#7a8290','right');
+  const footerY=canvas.height-150;ctx.fillStyle='#151922';ctx.fillRect(0,footerY,canvas.width,150);
+  text('BEST2BUY.IN',70,footerY+35,22,800,'#fff');text('Creative media · Print · Digital · Web',70,footerY+70,13,500,'#9ca5b5');text('best2buyind@gmail.com',1170,footerY+35,16,600,'#fff','right');text('Coimbatore, Tamil Nadu, India',1170,footerY+68,13,500,'#9ca5b5','right');text('This quotation is subject to final artwork, specifications and approval.',620,footerY+112,10,500,'#747e8e','center');
+  professionalRendering=false;
+};
