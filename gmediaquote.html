@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quotation Designer | Glory Media Works</title>
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#111111">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="gmediaquote.css">
+</head>
+<body>
+  <header class="app-header">
+    <a href="index.html" aria-label="Best2Buy home"><img src="gmedia-logo.png" alt="Glory Media Solutions"></a>
+    <div><span>GLORY MEDIA WORKS</span><strong>Quotation Designer</strong></div>
+  </header>
+
+  <main class="workspace">
+    <section class="editor" aria-labelledby="page-title">
+      <div class="editor-heading">
+        <div><p class="eyebrow">CREATE A QUOTATION</p><h1 id="page-title">Manual quote details</h1></div>
+        <button class="button ghost" id="reset" type="button">Reset</button>
+      </div>
+
+      <div class="panel">
+        <h2>Quotation information</h2>
+        <div class="fields two">
+          <label>Customer / Company<input id="customer" type="text" placeholder="Customer name"></label>
+          <label>Quotation number<input id="quote-number" type="text" placeholder="GMW-2026-001"></label>
+          <label>Quotation date<input id="quote-date" type="date"></label>
+          <label>Valid until<input id="valid-until" type="date"></label>
+        </div>
+        <label>Project / Subject<textarea id="subject" rows="2" placeholder="Brief description of the work"></textarea></label>
+      </div>
+
+      <div class="items-heading">
+        <div><h2>Products &amp; services</h2><p>Enter every item manually. Amounts and grand total are calculated automatically.</p></div>
+        <button class="button add" id="add-item" type="button">+ Add item</button>
+      </div>
+      <div id="items" class="items"></div>
+
+      <div class="panel">
+        <h2>Terms &amp; conditions</h2>
+        <textarea id="terms" rows="7" placeholder="Enter payment, delivery, revision and validity terms...">50% advance payment is required to begin the work.
+Final files will be delivered after receipt of the balance payment.
+This quotation is valid until the date shown above.</textarea>
+      </div>
+      <button class="button download mobile-download" id="download-mobile" type="button">Download A4 JPEG ↓</button>
+    </section>
+
+    <aside class="preview-panel">
+      <div class="preview-toolbar"><div><span>LIVE A4 PREVIEW</span><b>JPEG · 1240 × 1754</b></div><button class="button download" id="download" type="button">Download A4 JPEG ↓</button></div>
+      <div class="canvas-shell"><canvas id="quote-canvas" width="1240" height="1754" aria-label="Live A4 quotation preview"></canvas></div>
+      <p class="privacy">Your quotation stays in this browser and is used only for the downloaded image.</p>
+    </aside>
+  </main>
+
+  <template id="item-template">
+    <article class="item-card">
+      <div class="item-title"><span class="item-number"></span><h3>Line item</h3><strong class="line-total">₹0.00</strong><button class="remove-item" type="button">Remove</button></div>
+      <div class="fields item-fields">
+        <label>Product / Service name<input data-field="name" type="text" placeholder="e.g. Social media management"></label>
+        <label>Quantity<input data-field="qty" type="number" min="0" step="1" value="1"></label>
+        <label>Unit price (₹)<input data-field="price" type="number" min="0" step="0.01" placeholder="0.00"></label>
+        <label>Total<input data-field="total" type="text" value="₹0.00" readonly></label>
+        <label class="full">Description<textarea data-field="description" rows="3" placeholder="Scope, deliverables, specifications or other details..."></textarea></label>
+      </div>
+    </article>
+  </template>
+
+  <script src="gmediaquote.js" defer></script>
+</body>
+</html>
