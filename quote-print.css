@@ -1,0 +1,6 @@
+@page{size:A4 portrait;margin:0}
+@media print{
+  html,body{width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!important;overflow:hidden!important}
+  body *{visibility:hidden!important}
+  #quote-canvas{visibility:visible!important;position:fixed!important;inset:0!important;width:210mm!important;height:297mm!important;max-width:none!important;box-shadow:none!important;background:#fff!important}
+}
