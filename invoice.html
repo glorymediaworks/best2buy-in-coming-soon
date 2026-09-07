@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Invoice | Best2Buy</title>
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1e3a8a">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="billing.css"><link rel="stylesheet" href="billing-print.css">
+</head><body>
+  <header class="app-header"><a href="index.html" aria-label="Best2Buy home"><img src="Logo 1.png" alt="Best2Buy — Create. Connect. Grow."></a><div><span>INTERNAL TOOL</span><strong>Billing</strong></div></header>
+  <main class="workspace">
+    <section class="editor" aria-labelledby="editor-title">
+      <div class="editor-heading"><div><p class="eyebrow">CREATE A BILL</p><h1 id="editor-title">Invoice details</h1></div><button class="button ghost" id="reset-button" type="button">Reset</button></div>
+      <div class="panel"><h2>Bill information</h2><div class="fields two">
+        <label>Invoice / Bill number<input id="invoice-number" type="text"></label>
+        <label>Invoice date<input id="invoice-date" type="date"></label><label>Due date<input id="due-date" type="date"></label>
+      </div></div>
+      <div class="panel"><h2>Customer details</h2><div class="fields two">
+        <label>Customer / Company<input id="customer" type="text" placeholder="Customer or business name"></label><label>Phone<input id="phone" type="tel" placeholder="Phone number"></label>
+        <label>Email<input id="email" type="email" placeholder="customer@example.com"></label><label>GSTIN / Tax ID<input id="tax-id" type="text" placeholder="Optional"></label>
+        <label class="full">Billing address<textarea id="address" rows="3" placeholder="Street, city, state and PIN code"></textarea></label>
+      </div></div>
+      <div class="items-heading"><div><h2>Line items</h2><p>Add billed products or services. Amounts update automatically.</p></div><button class="button add" id="add-item" type="button">+ Add item</button></div>
+      <div id="items" class="items"></div>
+      <div class="panel totals-panel"><h2>Adjustments</h2><div class="fields three">
+        <label>Discount (₹)<input id="discount" type="number" min="0" step="0.01" value="0"></label><label>Tax / GST (%)<input id="tax-rate" type="number" min="0" step="0.01" value="0"></label><label>Shipping (₹)<input id="shipping" type="number" min="0" step="0.01" value="0"></label>
+      </div><div class="calculation" aria-live="polite"><span>Subtotal <b id="subtotal">₹0.00</b></span><span>Tax <b id="tax-total">₹0.00</b></span><strong>Grand total <b id="grand-total">₹0.00</b></strong></div></div>
+      <div class="panel"><h2>Payment &amp; notes</h2><div class="fields two"><label>Payment method / reference<input id="payment" type="text" placeholder="UPI, bank transfer, cash, reference…"></label><label class="full">Notes / payment terms<textarea id="notes" rows="4">Thank you for your business. Please include the invoice number with your payment.</textarea></label></div></div>
+      <div class="mobile-actions"><button class="button download" id="print-mobile" type="button">Print / Save PDF</button><button class="button secondary" id="download-mobile" type="button">Download JPG</button></div>
+    </section>
+    <aside class="preview-panel"><div class="preview-toolbar"><div><span>LIVE PREVIEW</span><b>A4 · PDF ready</b></div><div class="toolbar-actions"><button class="button secondary" id="download" type="button">Download JPG</button><button class="button download" id="print" type="button">Print / Save PDF</button></div></div><div class="canvas-shell"><canvas id="invoice-canvas" width="1240" height="1754" aria-label="Live preview of invoice"></canvas></div><p class="privacy">Your invoice information stays in this browser and is not uploaded.</p></aside>
+  </main>
+  <template id="item-template"><article class="item-card"><div class="item-title"><span class="item-number"></span><h3>Bill item</h3><strong class="line-total">₹0.00</strong><button class="remove-item" type="button">Remove</button></div><div class="fields item-fields"><label class="description">Item / service<input data-field="name" type="text" placeholder="e.g. Business card printing"></label><label>Quantity<input data-field="qty" type="number" min="0" step="0.01" value="1"></label><label>Rate (₹)<input data-field="rate" type="number" min="0" step="0.01" value="0"></label><label>Amount<input data-field="amount" type="text" value="₹0.00" readonly></label><label class="full">Description<textarea data-field="description" rows="2" placeholder="Optional specification or service details"></textarea></label></div></article></template>
+  <script src="billing.js" defer></script>
+</body></html>
