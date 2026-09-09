@@ -82,6 +82,14 @@
             <label>Delivery area / PIN code<input id="customer-area" type="text" autocomplete="postal-code" placeholder="Area or PIN code" required></label>
           </div>
 
+          <fieldset id="local-method-fieldset" class="conditional-fieldset">
+            <legend><span>04</span> Local fulfilment</legend>
+            <div class="delivery-grid">
+              <label><input type="radio" name="local-method" value="Local delivery" checked><span><b>Local delivery</b><small>₹49 below ₹999</small></span></label>
+              <label><input type="radio" name="local-method" value="Pickup from Podanur"><span><b>Pickup</b><small>Always free</small></span></label>
+            </div>
+          </fieldset>
+
           <fieldset id="delivery-fieldset" class="conditional-fieldset" hidden>
             <legend><span>04</span> Shipping preference</legend>
             <div class="delivery-grid">
@@ -102,7 +110,7 @@
           <div class="order-summary">
             <div><small>YOUR SELECTION</small><strong id="selection-summary">3 × 3 inches · 100 pieces</strong></div>
             <div class="price-summary"><span><small>PRICE / PIECE</small><b id="unit-price">₹48</b></span><span><small>PRODUCT TOTAL</small><b id="product-total">₹4,800</b></span></div>
-            <div class="shipping-status"><span id="shipping-badge">FREE DELIVERY</span><p id="shipping-copy">Free local delivery within 10 km of Podanur, Coimbatore.</p></div>
+            <div class="shipping-status"><span id="shipping-badge">FREE LOCAL DELIVERY</span><p id="shipping-copy">Free local delivery from ₹999 within 10 km of Podanur; otherwise ₹49. Pickup is free.</p></div>
           </div>
           <p id="savings-note" class="savings-note"></p>
           <p class="price-note">Prices include the printed 1 mm flexible magnet. Final artwork suitability and delivery details are confirmed on WhatsApp before production. Approximate finished size may vary by 1–2 mm.</p>
