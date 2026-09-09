@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="fridge-magnets.css">
+  <link rel="stylesheet" href="fridge-magnets-enhancements.css">
 </head>
 <body>
   <header class="site-header">
@@ -43,11 +44,12 @@
           <fieldset>
             <legend><span>01</span> Choose your size</legend>
             <div class="size-grid">
-              <label><input type="radio" name="size" value="2 × 2 inches"><span><b>2 × 2</b><small>inches</small></span></label>
-              <label><input type="radio" name="size" value="2 × 3 inches"><span><b>2 × 3</b><small>inches</small></span></label>
-              <label><input type="radio" name="size" value="3 × 3 inches" checked><span><b>3 × 3</b><small>inches</small></span></label>
-              <label><input type="radio" name="size" value="4 × 4 inches"><span><b>4 × 4</b><small>inches</small></span></label>
-              <label><input type="radio" name="size" value="4 × 6 inches"><span><b>4 × 6</b><small>inches</small></span></label>
+              <label><input type="radio" name="size" value="2 × 2 inches"><span><b>2 × 2</b><small>from ₹34 / pc</small></span></label>
+              <label><input type="radio" name="size" value="2 × 3 inches"><span><b>2 × 3</b><small>from ₹39 / pc</small></span></label>
+              <label><input type="radio" name="size" value="3 × 3 inches" checked><span><b>3 × 3</b><small>from ₹48 / pc</small></span></label>
+              <label><input type="radio" name="size" value="4 × 4 inches"><span><b>4 × 4</b><small>from ₹66 / pc</small></span></label>
+              <label><input type="radio" name="size" value="4 × 6 inches"><span><b>4 × 6</b><small>from ₹93 / pc</small></span></label>
+              <label><input type="radio" name="size" value="5 × 5 inches"><span><b>5 × 5</b><small>from ₹106 / pc</small></span></label>
               <label><input type="radio" name="size" value="Custom size"><span><b>Custom</b><small>ask us</small></span></label>
             </div>
           </fieldset>
@@ -55,31 +57,49 @@
           <fieldset>
             <legend><span>02</span> Select quantity</legend>
             <div class="qty-presets">
-              <button type="button" data-qty="25">25</button><button type="button" data-qty="50">50</button><button class="active" type="button" data-qty="100">100</button><button type="button" data-qty="200">200</button><button type="button" data-qty="500">500</button>
+              <button type="button" data-qty="2">2</button><button type="button" data-qty="6">6</button><button type="button" data-qty="10">10</button><button type="button" data-qty="25">25</button><button type="button" data-qty="50">50</button><button class="active" type="button" data-qty="100">100</button><button type="button" data-qty="200">200</button><button type="button" data-qty="500">500</button>
             </div>
-            <label class="manual-qty">Or enter quantity<input id="quantity" type="number" min="1" step="1" value="100" inputmode="numeric"></label>
+            <label class="manual-qty">Or enter quantity (minimum 2)<input id="quantity" type="number" min="2" step="1" value="100" inputmode="numeric"></label>
           </fieldset>
 
           <fieldset>
-            <legend><span>03</span> Delivery preference</legend>
-            <div class="delivery-grid">
-              <label><input type="radio" name="delivery" value="Free local delivery within 10 km of Podanur" checked><span><b>Local delivery</b><small>Free within 10 km of Podanur</small></span></label>
-              <label><input type="radio" name="delivery" value="Courier delivery"><span><b>Courier delivery</b><small>Shipping rule shown below</small></span></label>
-              <label><input type="radio" name="delivery" value="Collect from courier office"><span><b>Courier-office pickup</b><small>Collect when ready</small></span></label>
-              <label><input type="radio" name="delivery" value="Lorry service"><span><b>Lorry service</b><small>Confirmed on WhatsApp</small></span></label>
+            <legend><span>03</span> Where should we deliver?</legend>
+            <div class="location-grid">
+              <label><input type="radio" name="zone" value="Within 10 km of Podanur" checked><span><b>Near Podanur</b><small>Within 10 km</small></span></label>
+              <label><input type="radio" name="zone" value="Other Coimbatore"><span><b>Coimbatore</b><small>Outside 10 km</small></span></label>
+              <label><input type="radio" name="zone" value="Outside Coimbatore"><span><b>Other location</b><small>Courier / lorry</small></span></label>
             </div>
           </fieldset>
 
           <div class="customer-grid">
             <label>Your name<input id="customer-name" type="text" autocomplete="name" placeholder="Name"></label>
-            <label>Delivery area / PIN code<input id="customer-area" type="text" autocomplete="postal-code" placeholder="Area or PIN code"></label>
+            <label>Delivery area / PIN code<input id="customer-area" type="text" autocomplete="postal-code" placeholder="Area or PIN code" required></label>
           </div>
+
+          <fieldset id="delivery-fieldset" class="conditional-fieldset" hidden>
+            <legend><span>04</span> Shipping preference</legend>
+            <div class="delivery-grid">
+              <label><input type="radio" name="delivery" value="Courier home delivery" checked><span><b>Home delivery</b><small>Courier to your address</small></span></label>
+              <label><input type="radio" name="delivery" value="Collect from courier office"><span><b>Courier-office pickup</b><small>Collect from branch</small></span></label>
+              <label id="lorry-option"><input type="radio" name="delivery" value="Lorry service"><span><b>Lorry service</b><small>For bulk orders</small></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="mockup-fieldset">
+            <legend><span>05</span> Preview your magnet</legend>
+            <div class="mockup-layout">
+              <div id="mockup-stage" class="mockup-stage"><div id="mockup-magnet" class="mockup-magnet"><span id="mockup-placeholder">Your photo</span></div><small>Preview only</small></div>
+              <div class="upload-copy"><b>Upload your photo or artwork</b><p>See a quick visual preview before continuing. Your file stays on this device and is not uploaded to our server.</p><label class="upload-button">Choose image<input id="artwork" type="file" accept="image/png,image/jpeg,image/webp"></label><span id="artwork-name">PNG, JPG or WebP</span></div>
+            </div>
+          </fieldset>
 
           <div class="order-summary">
             <div><small>YOUR SELECTION</small><strong id="selection-summary">3 × 3 inches · 100 pieces</strong></div>
+            <div class="price-summary"><span><small>PRICE / PIECE</small><b id="unit-price">₹48</b></span><span><small>PRODUCT TOTAL</small><b id="product-total">₹4,800</b></span></div>
             <div class="shipping-status"><span id="shipping-badge">FREE DELIVERY</span><p id="shipping-copy">Free local delivery within 10 km of Podanur, Coimbatore.</p></div>
           </div>
-          <p class="price-note">Final product price and artwork suitability will be confirmed with you on WhatsApp before production.</p>
+          <p id="savings-note" class="savings-note"></p>
+          <p class="price-note">Prices include the printed 1 mm flexible magnet. Final artwork suitability and delivery details are confirmed on WhatsApp before production. Approximate finished size may vary by 1–2 mm.</p>
           <button class="whatsapp" type="submit"><span>Continue order on WhatsApp</span><b>↗</b></button>
           <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
         </form>
