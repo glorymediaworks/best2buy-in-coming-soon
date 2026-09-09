@@ -1,0 +1,5 @@
+const grid=document.querySelector('#product-grid'),search=document.querySelector('#product-search'),empty=document.querySelector('#empty-state');
+const products=Array.isArray(window.BEST2BUY_PRODUCTS)?window.BEST2BUY_PRODUCTS:[];
+function safe(value){return String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
+function render(query=''){const term=query.trim().toLowerCase(),visible=products.filter(item=>[item.title,item.category,item.description].join(' ').toLowerCase().includes(term));grid.innerHTML=visible.map(item=>`<article class="product-card"><a class="product-image" href="${safe(item.link)}"><img src="${safe(item.image)}" alt="${safe(item.title)}" loading="lazy"><span>${safe(item.badge||'View product')}</span></a><div class="product-copy"><small>${safe(item.category)}</small><h3><a href="${safe(item.link)}">${safe(item.title)}</a></h3><p>${safe(item.description)}</p><div><b>${safe(item.price)}</b><a href="${safe(item.link)}">View details <span>↗</span></a></div></div></article>`).join('');empty.hidden=visible.length>0}
+search.addEventListener('input',()=>render(search.value));render();
