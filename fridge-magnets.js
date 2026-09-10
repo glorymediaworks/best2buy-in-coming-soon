@@ -40,6 +40,21 @@ form.addEventListener('submit',event=>{
   event.preventDefault();const qty=qtyValue(),name=document.querySelector('#customer-name').value.trim(),area=document.querySelector('#customer-area').value.trim(),size=selected('size'),zone=selected('zone'),unit=priceFor(size,qty),total=unit?unit*qty:0;
   if(!area){formStatus.textContent='Please enter the delivery area or PIN code.';return}formStatus.textContent='';
   const delivery=zone==='Outside Coimbatore'?selected('delivery'):zone==='Within 10 km of Podanur'?selected('local-method'):'Local delivery to be coordinated',shipping=shippingFor(zone,qty,total).join(' — ');
+
+  // Meta Pixel conversion: valid order intent immediately before WhatsApp opens.
+  if(typeof window.fbq==='function'){
+    const pixelData={
+      content_name:'Flexible Fridge Magnet 1 mm',
+      content_category:'Personalised Products',
+      content_ids:[size],
+      content_type:'product',
+      num_items:qty,
+      currency:'INR'
+    };
+    if(unit)pixelData.value=total;
+    window.fbq('track','InitiateCheckout',pixelData);
+  }
+
   const message=['Hello Best2Buy, I would like to order Flexible Fridge Magnet 1 mm.',`Size: ${size}`,`Quantity: ${qty}`,unit&&`Price per piece: ${money(unit)}`,unit&&`Product total: ${money(total)}`,`Delivery zone: ${zone}`,`Delivery preference: ${delivery}`,`Shipping: ${shipping}`,name&&`Customer name: ${name}`,`Delivery area / PIN: ${area}`,artwork.files[0]&&`Artwork selected: ${artwork.files[0].name} (I will attach the original image in WhatsApp)`,'Please confirm artwork, payment and delivery details.'].filter(Boolean).join('\n');
   window.open(`https://wa.me/918778578974?text=${encodeURIComponent(message)}`,'_blank','noopener,noreferrer');
 });
