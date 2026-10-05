@@ -1,0 +1,8 @@
+const featuredGrid=document.querySelector('#featured-grid');
+const links=Array.isArray(window.BEST2BUY_PRODUCT_LINKS)?window.BEST2BUY_PRODUCT_LINKS:[];
+const entries=Array.isArray(window.BEST2BUY_PRODUCTS)?window.BEST2BUY_PRODUCTS:links;
+function meta(doc,key){return doc.querySelector(`meta[property="${key}"],meta[name="${key}"]`)?.content||''}
+function safe(value){return String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
+async function readProduct(entry){if(typeof entry==='object')return entry;const link=entry,response=await fetch(link);if(!response.ok)throw new Error('Product unavailable');const doc=new DOMParser().parseFromString(await response.text(),'text/html');return{link,title:meta(doc,'og:title')||doc.title,description:meta(doc,'og:description')||meta(doc,'description'),image:meta(doc,'og:image'),price:meta(doc,'product:price')||'View details',category:meta(doc,'product:category')||'Best2Buy product'}}
+async function load(){const products=(await Promise.allSettled(entries.map(readProduct))).filter(item=>item.status==='fulfilled').map(item=>item.value);featuredGrid.innerHTML=products.slice(0,3).map(item=>`<article class="featured-card"><a class="featured-image" href="${safe(item.link)}"><img src="${safe(item.image)}" alt="${safe(item.title)}" loading="lazy"><span>View product ↗</span></a><div><small>${safe(item.category)}</small><h3>${safe(item.title)}</h3><p>${safe(item.description)}</p><b>${safe(item.price)}</b></div></article>`).join('')||'<p class="empty">Products are being prepared. Check back soon.</p>'}
+load();
