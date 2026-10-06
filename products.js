@@ -1,6 +1,20 @@
 const grid=document.querySelector('#product-grid'),search=document.querySelector('#product-search'),empty=document.querySelector('#empty-state');
-const fallback=[{link:'fridge-magnets.html',title:'Flexible Fridge Magnet 1 mm',description:'Custom photo and promotional magnets in six sizes with live quantity pricing and artwork preview.',image:'magnet-square-gallery.jpg',price:'From ₹34 / piece',category:'Personalised products'}];let products=[];
-function safe(value){return String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
-function render(query=''){const term=query.trim().toLowerCase(),visible=products.filter(item=>[item.title,item.category,item.description].join(' ').toLowerCase().includes(term));grid.innerHTML=visible.map(item=>`<article class="product-card"><a class="product-image" href="${safe(item.link)}"><img src="${safe(item.image)}" alt="${safe(item.title)}" loading="lazy"><span>View product</span></a><div class="product-copy"><small>${safe(item.category)}</small><h3><a href="${safe(item.link)}">${safe(item.title)}</a></h3><p>${safe(item.description)}</p><div><b>${safe(item.price)}</b><a href="${safe(item.link)}">View details <span>↗</span></a></div></div></article>`).join('');empty.hidden=visible.length>0}
-async function load(){try{const client=supabase.createClient(BEST2BUY_SUPABASE.url,BEST2BUY_SUPABASE.key);const result=await client.from('products').select('*').eq('published',true).order('created_at',{ascending:false});if(!result.error)products=result.data.map(item=>({link:item.product_url||`product.html?slug=${encodeURIComponent(item.slug)}`,title:item.title,description:item.description,image:item.image_url,price:item.price_label,category:item.category}))}catch(error){}if(!products.length)products=fallback;render(search.value)}
-search.addEventListener('input',()=>render(search.value));load();
+const fallback=[{title:'Flexible Fridge Magnet 1 mm',description:'Custom photo and promotional magnets in six sizes with live quantity pricing and artwork preview.',category:'Personalised products',price_label:'From ₹34 / piece',image_url:'magnet-square-gallery.jpg',product_url:'fridge-magnets.html'}];
+let products=[];
+/* Search can match the description, but the card never displays it. */
+function render(query=''){
+  const term=query.trim().toLowerCase(),visible=products.filter(item=>[item.title,item.category,item.description].join(' ').toLowerCase().includes(term));
+  grid.innerHTML=visible.map(Best2BuyCatalog.cardHtml).join('');
+  empty.hidden=visible.length>0;
+}
+async function load(){
+  try{
+    const client=supabase.createClient(BEST2BUY_SUPABASE.url,BEST2BUY_SUPABASE.key);
+    const result=await client.from('products').select('*').eq('published',true).order('created_at',{ascending:false});
+    if(!result.error)products=result.data;
+  }catch(error){}
+  if(!products.length)products=fallback;
+  render(search.value);
+}
+search.addEventListener('input',()=>render(search.value));
+load();

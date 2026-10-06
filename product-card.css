@@ -1,0 +1,18 @@
+/* Product card (home + /products). Blue band + highlighted INR price; image area is 4:5 on white. */
+.p-card{display:flex;flex-direction:column;overflow:hidden;border-radius:22px;background:var(--blue,#1e3a8a);box-shadow:0 18px 40px rgba(30,58,138,.18);transition:transform .25s,box-shadow .25s}
+.p-card:hover{transform:translateY(-5px);box-shadow:0 24px 50px rgba(30,58,138,.28)}
+.p-card a{color:inherit;text-decoration:none}
+.p-media{position:relative;display:block;aspect-ratio:4/5;overflow:hidden;background:#fff}
+.p-media img{display:block;width:100%;height:100%;object-fit:contain;transition:transform .35s}
+.p-card:hover .p-media img{transform:scale(1.03)}
+.p-tag{position:absolute;left:14px;top:14px;z-index:1;padding:7px 12px;border-radius:999px;background:var(--blue,#1e3a8a);color:#fff;font-size:10px;font-weight:900;letter-spacing:1.4px}
+.p-body{display:flex;flex-direction:column;gap:10px;padding:18px 20px 20px;color:#fff}
+.p-cat{color:#b9c9f5;font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}
+.p-body h3{display:-webkit-box;margin:0;overflow:hidden;font-size:20px;line-height:1.22;letter-spacing:-.4px;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.p-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
+.p-price{display:inline-flex;flex-wrap:wrap;align-items:center;gap:7px}
+.p-amt{padding:6px 14px;border-radius:12px;background:#fff;color:var(--blue,#1e3a8a);font-size:24px;font-weight:900;letter-spacing:-.6px;line-height:1.1}
+.p-pre,.p-suf{color:#cdd9fb;font-size:11px;font-weight:700}
+.p-ask{color:#fff;font-size:15px;font-weight:800}
+.p-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1.5px solid rgba(255,255,255,.7);border-radius:999px;font-size:12px;font-weight:800;transition:background .2s,color .2s}
+.p-btn:hover{background:#fff;color:var(--blue,#1e3a8a)}

@@ -1,5 +1,13 @@
 const featuredGrid=document.querySelector('#featured-grid');
-const fallback=[{link:'fridge-magnets.html',title:'Flexible Fridge Magnet 1 mm',description:'Custom photo and promotional magnets in six sizes with live quantity pricing and artwork preview.',image:'magnet-square-gallery.jpg',price:'From ₹34 / piece',category:'Personalised products'}];
-function safe(value){return String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
-async function load(){let products=[];try{const client=supabase.createClient(BEST2BUY_SUPABASE.url,BEST2BUY_SUPABASE.key);const result=await client.from('products').select('*').eq('published',true).order('created_at',{ascending:false}).limit(3);if(!result.error)products=result.data.map(item=>({link:item.product_url||`product.html?slug=${encodeURIComponent(item.slug)}`,title:item.title,description:item.description,image:item.image_url,price:item.price_label,category:item.category}))}catch(error){}if(!products.length)products=fallback;featuredGrid.innerHTML=products.map(item=>`<article class="featured-card"><a class="featured-image" href="${safe(item.link)}"><img src="${safe(item.image)}" alt="${safe(item.title)}" loading="lazy"><span>View product ↗</span></a><div><small>${safe(item.category)}</small><h3>${safe(item.title)}</h3><p>${safe(item.description)}</p><b>${safe(item.price)}</b></div></article>`).join('')}
+const fallback=[{title:'Flexible Fridge Magnet 1 mm',category:'Personalised products',price_label:'From ₹34 / piece',image_url:'magnet-square-gallery.jpg',product_url:'fridge-magnets.html'}];
+async function load(){
+  let products=[];
+  try{
+    const client=supabase.createClient(BEST2BUY_SUPABASE.url,BEST2BUY_SUPABASE.key);
+    const result=await client.from('products').select('*').eq('published',true).order('created_at',{ascending:false}).limit(3);
+    if(!result.error)products=result.data;
+  }catch(error){}
+  if(!products.length)products=fallback;
+  featuredGrid.innerHTML=products.map(Best2BuyCatalog.cardHtml).join('');
+}
 load();
