@@ -56,6 +56,6 @@ form.addEventListener('submit',event=>{
   }
 
   const message=['Hello Best2Buy, I would like to order Flexible Fridge Magnet 1 mm.',`Size: ${size}`,`Quantity: ${qty}`,unit&&`Price per piece: ${money(unit)}`,unit&&`Product total: ${money(total)}`,`Delivery zone: ${zone}`,`Delivery preference: ${delivery}`,`Shipping: ${shipping}`,name&&`Customer name: ${name}`,`Delivery area / PIN: ${area}`,artwork.files[0]&&`Artwork selected: ${artwork.files[0].name} (I will attach the original image in WhatsApp)`,'Please confirm artwork, payment and delivery details.'].filter(Boolean).join('\n');
-  window.open(`https://wa.me/918778578974?text=${encodeURIComponent(message)}`,'_blank','noopener,noreferrer');
+  window.open(window.best2buyWhatsApp(message),'_blank','noopener,noreferrer');
 });
 updateSummary();
