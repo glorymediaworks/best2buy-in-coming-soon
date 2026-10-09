@@ -13,7 +13,7 @@ window.BEST2BUY_SITE={
   /* Social links. Leave a link empty ('') to hide its icon. */
   social:{
     instagram:'https://www.instagram.com/best2buyin/',
-    facebook:''
+    facebook:'https://www.facebook.com/profile.php?id=61575215652819'
   }
 };
 
