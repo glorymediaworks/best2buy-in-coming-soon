@@ -11,3 +11,6 @@ async function load(){
   featuredGrid.innerHTML=products.map(Best2BuyCatalog.cardHtml).join('');
 }
 load();
+
+/* Marquee: constant speed (~80px/s) regardless of screen size or font loading. */
+(function(){const track=document.querySelector('.marquee-track');if(!track)return;const setSpeed=()=>{const width=track.firstElementChild.getBoundingClientRect().width;if(width)track.style.animationDuration=Math.max(20,width/80)+'s'};setSpeed();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setSpeed)})();

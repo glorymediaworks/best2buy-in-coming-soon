@@ -7,6 +7,7 @@ create table if not exists public.products (
   price_label text not null default 'Ask for price',
   product_url text not null default '',
   image_url text not null default '',
+  images text[] not null default '{}',
   published boolean not null default true,
   created_at timestamptz not null default now()
 );
@@ -28,3 +29,7 @@ drop policy if exists "Signed-in admins can edit product images" on storage.obje
 create policy "Signed-in admins can edit product images" on storage.objects for update to authenticated using (bucket_id='product-images') with check (bucket_id='product-images');
 drop policy if exists "Signed-in admins can delete product images" on storage.objects;
 create policy "Signed-in admins can delete product images" on storage.objects for delete to authenticated using (bucket_id='product-images');
+
+-- Multiple product images: images[1] = main display image, the rest = gallery. image_url mirrors images[1].
+alter table public.products add column if not exists images text[] not null default '{}';
+update public.products set images = array[image_url] where image_url <> '' and images = '{}';
