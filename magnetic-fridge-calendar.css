@@ -1,0 +1,14 @@
+/* Magnetic Fridge Photo Calendar page: extras on top of fridge-magnets.css (same layout, delivery and order styles). */
+.size-grid.thickness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.thickness-grid label span{min-height:78px}.thickness-grid label b{font-size:18px}.thickness-grid label small{font-size:11px;font-weight:700}
+.cal-mockup{position:relative;z-index:1;display:flex;flex-direction:column;width:150px;aspect-ratio:148/210;overflow:hidden;border-radius:6px;background:#fff;box-shadow:3px 4px 0 #c3c9d3,0 14px 26px rgba(22,31,48,.28);transition:.2s}
+.cal-photo{display:grid;flex:0 0 55%;place-items:center;background:linear-gradient(135deg,#24469b,#ff315f);background-position:center;background-size:cover}
+.cal-photo span{padding:6px;color:#fff;font-size:12px;font-weight:800;text-align:center;text-shadow:0 1px 5px #111}
+.cal-body{display:flex;flex:1;flex-direction:column;gap:3px;padding:5px 8px 4px}
+.cal-body h6{margin:0;color:#1e3a8a;font-size:7px;font-weight:800;letter-spacing:1.2px;text-align:center}.cal-body h6 b{color:#687386;font-weight:500}
+.cal-dow,.cal-days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.cal-dow i,.cal-days i{color:#232b3a;font-size:6px;font-style:normal;font-weight:700;line-height:1.75}
+.cal-dow i{border-bottom:1px solid #1e3a8a;color:#1e3a8a}.cal-days i:nth-child(7n),.cal-days i:nth-child(7n-1){color:#d6336c}
+@media(max-width:600px){.cal-mockup{width:140px}}
+.mockup-stage{min-height:252px;padding:14px 0 28px;align-content:center}
+@media(max-width:600px){.mockup-stage{min-height:244px}}
