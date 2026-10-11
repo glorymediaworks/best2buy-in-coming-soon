@@ -10,6 +10,13 @@
 window.BEST2BUY_SITE={
   whatsappNumber:'918778578974',
   email:'best2buyind@gmail.com',
+  /* Global checkout mode: 'whatsapp' (current) | 'gateway' (future e.g. Razorpay, Cashfree, Stripe) */
+  checkoutMode:'whatsapp',
+  /* Gateway settings placeholder for future integration */
+  gateway:{
+    provider:'razorpay',
+    keyId:''
+  },
   /* Social links. Leave a link empty ('') to hide its icon. */
   social:{
     instagram:'https://www.instagram.com/best2buyin/',
@@ -20,6 +27,29 @@ window.BEST2BUY_SITE={
 /* Builds the WhatsApp checkout link for any message. */
 window.best2buyWhatsApp=function(message){
   return 'https://wa.me/'+window.BEST2BUY_SITE.whatsappNumber+'?text='+encodeURIComponent(message||'Hello Best2Buy');
+};
+
+/* Universal Order Processor: works across all product pages automatically.
+   When checkoutMode is 'whatsapp', it opens WhatsApp with structured details.
+   When changed to 'gateway', it triggers the online payment flow. */
+window.Best2BuyCheckout=function(orderData){
+  var mode=(orderData&&orderData.providerOverride!=='global'&&orderData.providerOverride)?orderData.providerOverride:(window.BEST2BUY_SITE.checkoutMode||'whatsapp');
+  if(mode==='whatsapp'){
+    var lines=['Hello Best2Buy, I would like to place an order:'];
+    if(orderData.title)lines.push('Product: '+orderData.title);
+    if(orderData.optionsSummary)lines.push('Options: '+orderData.optionsSummary);
+    if(orderData.quantity)lines.push('Quantity: '+orderData.quantity);
+    if(orderData.total)lines.push('Total: ₹'+orderData.total);
+    if(orderData.customerName)lines.push('Customer: '+orderData.customerName);
+    if(orderData.deliveryArea)lines.push('Delivery Area / PIN: '+orderData.deliveryArea);
+    if(orderData.shippingMethod)lines.push('Fulfilment: '+orderData.shippingMethod);
+    lines.push('Product Link: '+(orderData.url||window.location.href));
+    lines.push('Please confirm availability and dispatch timeline.');
+    var url=window.best2buyWhatsApp(lines.join('\n'));
+    window.open(url,'_blank','noopener,noreferrer');
+  }else{
+    alert('Online Payment Gateway integration is selected. Once gateway credentials are provided in site-config.js, this will trigger the secure payment modal.');
+  }
 };
 
 /* Any link written as <a data-whatsapp="message text"> is wired automatically. */

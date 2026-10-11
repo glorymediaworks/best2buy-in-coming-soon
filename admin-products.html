@@ -1,1 +1,58 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Product CMS | Best2Buy</title><link rel="stylesheet" href="admin-products.css?v=4"></head><body><main class="admin-shell"><header><a href="index.html"><img src="Logo%201.png" alt="Best2Buy"></a><a href="index.html">← Website</a></header><section id="auth-panel" class="panel auth-panel"><p class="kicker">BEST2BUY CMS</p><h1>Manage your products.</h1><p>Sign in to add products that appear on the homepage instantly.</p><form id="auth-form"><label>Email<input id="auth-email" type="email" required></label><label>Password<input id="auth-password" type="password" required minlength="6"></label><div><button class="primary" id="sign-in" type="submit">Sign in</button><button class="secondary" id="sign-up" type="button">Create account</button></div><p id="auth-status" role="status"></p></form></section><section id="cms-panel" hidden><div class="cms-top"><div><p class="kicker">PRODUCT CMS</p><h1>Your catalogue</h1></div><button id="sign-out" class="secondary">Sign out</button></div><div class="manager-grid"><form id="product-form" class="panel"><h2 id="form-title">Add product</h2><input type="hidden" id="product-id"><label>Product name<input id="product-title" required placeholder="Flexible Fridge Magnet 1 mm"></label><label>Custom page link (optional)<input id="product-url" placeholder="Leave blank to use the automatic product page"></label><label>Category<input id="product-category" placeholder="Personalised products"></label><label>Price / offer label<input id="product-price" placeholder="From ₹34 / piece"></label><label>Product description<textarea id="product-description" rows="3"></textarea></label><div class="field-group"><span class="field-title">Product images</span><p id="image-count" class="img-hint"></p><div id="image-manager" class="image-manager"></div></div><label class="check"><input id="product-published" type="checkbox" checked> Show this product on the website</label><button class="primary" type="submit">Save product</button><button class="secondary" id="cancel-edit" type="button" hidden>Cancel edit</button><p id="form-status"></p></form><div class="panel"><div class="list-head"><h2>Published products</h2><button id="refresh" class="secondary">Refresh</button></div><div id="product-list"></div></div></div></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="admin-products.js?v=4"></script></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Product CMS | Best2Buy</title><link rel="stylesheet" href="admin-products.css?v=4"></head><body><main class="admin-shell"><header><a href="index.html"><img src="Logo%201.png" alt="Best2Buy"></a><a href="index.html">← Website</a></header><section id="auth-panel" class="panel auth-panel"><p class="kicker">BEST2BUY CMS</p><h1>Manage your products.</h1><p>Sign in to add products that appear on the homepage instantly.</p><form id="auth-form"><label>Email<input id="auth-email" type="email" required></label><label>Password<input id="auth-password" type="password" required minlength="6"></label><div><button class="primary" id="sign-in" type="submit">Sign in</button><button class="secondary" id="sign-up" type="button">Create account</button></div><p id="auth-status" role="status"></p></form></section><section id="cms-panel" hidden><div class="cms-top"><div><p class="kicker">PRODUCT CMS</p><h1>Your catalogue</h1></div><button id="sign-out" class="secondary">Sign out</button></div><div class="manager-grid"><form id="product-form" class="panel"><h2 id="form-title">Add product</h2><input type="hidden" id="product-id"><label>Product name<input id="product-title" required placeholder="Flexible Fridge Magnet 1 mm"></label><label>Custom page link (optional)<input id="product-url" placeholder="Leave blank to use the automatic universal product page"></label><label>Category<input id="product-category" placeholder="Personalised products"></label><label>Product description<textarea id="product-description" rows="3" placeholder="Tell customers about the quality, finish, and details..."></textarea></label><div class="field-group"><span class="field-title">Product images</span><p id="image-count" class="img-hint"></p><div id="image-manager" class="image-manager"></div></div>
+
+<!-- MODULAR PRICING & OPTIONS MODULE -->
+<div class="field-group module-card">
+  <div class="module-header"><span class="field-title">Pricing &amp; Options Structure</span><small>Choose how customers select &amp; pay</small></div>
+  <div class="radio-row">
+    <label class="radio-item"><input type="radio" name="pricing-type-radio" value="simple" checked><span><b>Single / Fixed Price</b><small>Standard price for product</small></span></label>
+    <label class="radio-item"><input type="radio" name="pricing-type-radio" value="options"><span><b>Variable / Options</b><small>Sizes, thickness, colors...</small></span></label>
+  </div>
+
+  <div id="simple-pricing-panel">
+    <label>Price / Offer label<input id="product-price" placeholder="e.g. ₹149 or From ₹34 / piece"></label>
+  </div>
+
+  <div id="options-pricing-panel" hidden>
+    <div class="options-top">
+      <label class="inline-label">Option Name (e.g. Size, Thickness, Material)
+        <input id="option-group-name" placeholder="Choose your size" value="Choose your size">
+      </label>
+    </div>
+    <div class="option-items-head"><span>Option Label / Size</span><span>Unit Price (₹)</span><span>Action</span></div>
+    <div id="options-list" class="options-list"></div>
+    <button type="button" id="add-option-btn" class="secondary">+ Add option value</button>
+  </div>
+
+  <div class="inline-fields">
+    <label>Minimum Order Quantity<input id="product-min-qty" type="number" min="1" value="1"></label>
+  </div>
+</div>
+
+<!-- MODULAR CUSTOMER PHOTO / MOCKUP PREVIEW MODULE -->
+<div class="field-group module-card">
+  <div class="module-header"><span class="field-title">Interactive Mockup Preview</span><small>Allow customers to upload artwork</small></div>
+  <label class="check"><input id="product-has-preview" type="checkbox"> Enable live customer photo / mockup preview</label>
+  <div id="preview-settings-panel" hidden>
+    <label>Mockup Style
+      <select id="product-preview-type">
+        <option value="magnet">Flexible Magnet Frame (Photo on fridge)</option>
+        <option value="calendar">A5 Calendar Frame (Photo + Monthly grid)</option>
+        <option value="custom">Standard Artwork / Product Mockup</option>
+      </select>
+    </label>
+  </div>
+</div>
+
+<!-- MODULAR CHECKOUT / ORDER PROCESS MODULE -->
+<div class="field-group module-card">
+  <div class="module-header"><span class="field-title">Order Processing Mode</span><small>Universal &amp; future-proof</small></div>
+  <label>Checkout Provider
+    <select id="product-checkout-provider">
+      <option value="global" selected>Store Default (Currently WhatsApp; updates everywhere when payment gateway is added)</option>
+      <option value="whatsapp">Strictly WhatsApp Order Conversation</option>
+      <option value="gateway">Payment Gateway (When active)</option>
+    </select>
+  </label>
+</div>
+
+<label class="check"><input id="product-published" type="checkbox" checked> Show this product on the website</label><button class="primary" type="submit">Save product</button><button class="secondary" id="cancel-edit" type="button" hidden>Cancel edit</button><p id="form-status"></p></form><div class="panel"><div class="list-head"><h2>Published products</h2><button id="refresh" class="secondary">Refresh</button></div><div id="product-list"></div></div></div></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="admin-products.js?v=4"></script></body></html>

@@ -33,3 +33,12 @@ create policy "Signed-in admins can delete product images" on storage.objects fo
 -- Multiple product images: images[1] = main display image, the rest = gallery. image_url mirrors images[1].
 alter table public.products add column if not exists images text[] not null default '{}';
 update public.products set images = array[image_url] where image_url <> '' and images = '{}';
+
+-- Modular eCommerce Engine: Options, Pricing Matrix, Mockup Preview, and Universal Checkout
+alter table public.products add column if not exists pricing_type text not null default 'simple'; -- 'simple' | 'options' | 'tier'
+alter table public.products add column if not exists base_price numeric not null default 0;
+alter table public.products add column if not exists min_qty integer not null default 1;
+alter table public.products add column if not exists options_config jsonb not null default '[]'::jsonb;
+alter table public.products add column if not exists has_preview boolean not null default false;
+alter table public.products add column if not exists preview_type text not null default 'magnet'; -- 'magnet' | 'calendar' | 'framed' | 'none'
+alter table public.products add column if not exists checkout_provider text not null default 'global'; -- 'global' | 'whatsapp' | 'gateway'

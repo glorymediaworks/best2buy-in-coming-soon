@@ -25,5 +25,203 @@ authForm.addEventListener('submit',async event=>{event.preventDefault();authStat
 document.querySelector('#sign-up').addEventListener('click',async()=>{authStatus.textContent='Creating account…';const {error}=await client.auth.signUp({email:field('auth-email').value,password:field('auth-password').value});authStatus.textContent=error?.message||'Account created. Check your email if confirmation is enabled.'});
 document.querySelector('#sign-out').addEventListener('click',()=>client.auth.signOut());client.auth.onAuthStateChange(()=>{setTimeout(showSession,0)});
 async function loadProducts(){const {data,error}=await client.from('products').select('*').order('created_at',{ascending:false});if(error){list.innerHTML=`<p class="error">${error.message}</p>`;return}list.innerHTML=data.length?data.map(item=>`<div class="item"><img src="${item.image_url||'Logo%201.png'}" alt=""><div><h3>${item.title}</h3><p>${item.price_label} · ${item.published?'Published':'Hidden'}</p></div><div class="item-actions"><button data-edit="${item.id}">Edit</button><button data-delete="${item.id}" class="danger">Delete</button></div></div>`).join(''):'<p class="empty">No products yet. Add your first product.</p>'}
-form.addEventListener('submit',async event=>{event.preventDefault();const saveButton=form.querySelector('button[type=submit]');saveButton.disabled=true;status.textContent='Checking admin session…';try{const user=await requireUser();if(!user){status.textContent=EXPIRED;showLogin(EXPIRED);return}if(!slots[0]){status.textContent='Please add a cover image (the first image) before saving. Gallery images are optional.';return}const gallery=slots.filter(Boolean);status.textContent='Saving…';const id=field('product-id').value,title=field('product-title').value.trim(),pending=gallery.filter(item=>item.file).length;let uploaded=0;for(const item of gallery){if(!item.file)continue;uploaded++;status.textContent=`Uploading image ${uploaded} of ${pending}…`;const file=item.file,path=`${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`,upload=await client.storage.from('product-images').upload(path,file,{upsert:false,contentType:file.type||undefined});if(upload.error){renderGallery();status.textContent=`Image upload failed (${file.name}): ${describe(upload.error)}`;return}item.url=client.storage.from('product-images').getPublicUrl(path).data.publicUrl;URL.revokeObjectURL(item.preview);delete item.file;delete item.preview}const urls=gallery.map(item=>item.url);status.textContent='Saving…';const record={title,slug:slugify(title),product_url:field('product-url').value.trim(),category:field('product-category').value.trim()||'Best2Buy product',price_label:field('product-price').value.trim()||'Ask for price',description:field('product-description').value.trim(),published:field('product-published').checked};record.image_url=urls[0]||'';record.images=urls;const result=id?await client.from('products').update(record).eq('id',id):await client.from('products').insert(record);if(result.error){status.textContent=`Save failed: ${describe(result.error)}`;return}status.textContent='Saved. It is now reflected on the website.';form.reset();field('product-id').value='';field('product-published').checked=true;cancel.hidden=true;setMode(false);resetGallery();loadProducts()}catch(error){status.textContent=`Save failed: ${describe(error)}`}finally{saveButton.disabled=false}});
-list.addEventListener('click',async event=>{const id=event.target.dataset.edit||event.target.dataset.delete;if(!id)return;if(event.target.dataset.edit){const {data}=await client.from('products').select('*').eq('id',id).single();field('product-id').value=data.id;field('product-title').value=data.title;field('product-url').value=data.product_url;field('product-category').value=data.category;field('product-price').value=data.price_label;field('product-description').value=data.description;field('product-published').checked=data.published;resetGallery();slots=(Array.isArray(data.images)&&data.images.length?data.images:(data.image_url?[data.image_url]:[])).map(url=>({url}));while(slots.length<MIN_SLOTS)slots.push(null);renderGallery();cancel.hidden=false;setMode(true,data.title);window.scrollTo({top:0,behavior:'smooth'})}else if(confirm('Delete this product?')){const user=await requireUser();if(!user){status.textContent=EXPIRED;showLogin(EXPIRED);return}const {error}=await client.from('products').delete().eq('id',id);if(error){status.textContent=`Delete failed: ${describe(error)}`;return}loadProducts()}});cancel.addEventListener('click',()=>{form.reset();field('product-id').value='';cancel.hidden=true;setMode(false);resetGallery()});document.querySelector('#refresh').addEventListener('click',loadProducts);setMode(false);renderGallery();showSession();
+/* Options Builder state */
+let productOptions=[];
+const optionsList=document.querySelector('#options-list');
+const simplePricingPanel=document.querySelector('#simple-pricing-panel');
+const optionsPricingPanel=document.querySelector('#options-pricing-panel');
+const previewSettingsPanel=document.querySelector('#preview-settings-panel');
+const hasPreviewCheckbox=document.querySelector('#product-has-preview');
+
+function renderOptionsList(){
+  if(!optionsList)return;
+  optionsList.innerHTML=productOptions.map((opt,idx)=>`
+    <div class="option-row" data-idx="${idx}">
+      <input type="text" placeholder="e.g. 3 × 3 inches or 0.5 mm" value="${opt.name||''}" data-key="name">
+      <input type="number" placeholder="48" min="0" step="any" value="${opt.price||''}" data-key="price">
+      <button type="button" data-del-opt="${idx}" title="Remove">✕</button>
+    </div>
+  `).join('');
+}
+
+document.querySelector('#add-option-btn')?.addEventListener('click',()=>{
+  productOptions.push({name:'',price:''});
+  renderOptionsList();
+});
+
+optionsList?.addEventListener('input',e=>{
+  const row=e.target.closest('.option-row');
+  if(!row)return;
+  const idx=Number(row.dataset.idx);
+  const key=e.target.dataset.key;
+  if(productOptions[idx])productOptions[idx][key]=e.target.value;
+});
+
+optionsList?.addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-del-opt]');
+  if(!btn)return;
+  const idx=Number(btn.dataset.delOpt);
+  productOptions.splice(idx,1);
+  renderOptionsList();
+});
+
+document.querySelectorAll('input[name="pricing-type-radio"]').forEach(radio=>{
+  radio.addEventListener('change',e=>{
+    const isOptions=e.target.value==='options';
+    simplePricingPanel.hidden=isOptions;
+    optionsPricingPanel.hidden=!isOptions;
+  });
+});
+
+hasPreviewCheckbox?.addEventListener('change',e=>{
+  previewSettingsPanel.hidden=!e.target.checked;
+});
+
+function resetModularFields(){
+  productOptions=[];
+  renderOptionsList();
+  document.querySelector('input[name="pricing-type-radio"][value="simple"]').checked=true;
+  simplePricingPanel.hidden=false;
+  optionsPricingPanel.hidden=true;
+  field('option-group-name').value='Choose your size';
+  field('product-min-qty').value='1';
+  hasPreviewCheckbox.checked=false;
+  previewSettingsPanel.hidden=true;
+  field('product-preview-type').value='magnet';
+  field('product-checkout-provider').value='global';
+}
+
+form.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const saveButton=form.querySelector('button[type=submit]');
+  saveButton.disabled=true;
+  status.textContent='Checking admin session…';
+  try{
+    const user=await requireUser();
+    if(!user){status.textContent=EXPIRED;showLogin(EXPIRED);return}
+    if(!slots[0]){status.textContent='Please add a cover image (the first image) before saving. Gallery images are optional.';return}
+    const gallery=slots.filter(Boolean);
+    status.textContent='Saving…';
+    const id=field('product-id').value,title=field('product-title').value.trim(),pending=gallery.filter(item=>item.file).length;
+    let uploaded=0;
+    for(const item of gallery){
+      if(!item.file)continue;
+      uploaded++;
+      status.textContent=`Uploading image ${uploaded} of ${pending}…`;
+      const file=item.file,path=`${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`,upload=await client.storage.from('product-images').upload(path,file,{upsert:false,contentType:file.type||undefined});
+      if(upload.error){renderGallery();status.textContent=`Image upload failed (${file.name}): ${describe(upload.error)}`;return}
+      item.url=client.storage.from('product-images').getPublicUrl(path).data.publicUrl;
+      URL.revokeObjectURL(item.preview);
+      delete item.file;delete item.preview;
+    }
+    const urls=gallery.map(item=>item.url);
+    status.textContent='Saving…';
+    
+    const pricingType=document.querySelector('input[name="pricing-type-radio"]:checked').value;
+    const cleanOptions=productOptions.filter(o=>o.name&&o.name.trim()).map(o=>({name:o.name.trim(),price:Number(o.price)||0}));
+    
+    let priceLabel=field('product-price').value.trim();
+    if(pricingType==='options' && cleanOptions.length){
+      const minP=Math.min(...cleanOptions.map(o=>o.price));
+      priceLabel=`From ₹${minP}`;
+    }else if(!priceLabel){
+      priceLabel='Ask for price';
+    }
+
+    const record={
+      title,
+      slug:slugify(title),
+      product_url:field('product-url').value.trim(),
+      category:field('product-category').value.trim()||'Personalised products',
+      price_label:priceLabel,
+      description:field('product-description').value.trim(),
+      published:field('product-published').checked,
+      image_url:urls[0]||'',
+      images:urls,
+      pricing_type:pricingType,
+      min_qty:Number(field('product-min-qty').value)||1,
+      options_config:{
+        group_name:field('option-group-name').value.trim()||'Choose an option',
+        items:cleanOptions
+      },
+      has_preview:hasPreviewCheckbox.checked,
+      preview_type:field('product-preview-type').value,
+      checkout_provider:field('product-checkout-provider').value
+    };
+
+    const result=id?await client.from('products').update(record).eq('id',id):await client.from('products').insert(record);
+    if(result.error){status.textContent=`Save failed: ${describe(result.error)}`;return}
+    status.textContent='Saved. It is now reflected on the website.';
+    form.reset();
+    field('product-id').value='';
+    field('product-published').checked=true;
+    cancel.hidden=true;
+    setMode(false);
+    resetGallery();
+    resetModularFields();
+    loadProducts();
+  }catch(error){status.textContent=`Save failed: ${describe(error)}`}
+  finally{saveButton.disabled=false}
+});
+
+list.addEventListener('click',async event=>{
+  const id=event.target.dataset.edit||event.target.dataset.delete;
+  if(!id)return;
+  if(event.target.dataset.edit){
+    const {data}=await client.from('products').select('*').eq('id',id).single();
+    field('product-id').value=data.id;
+    field('product-title').value=data.title;
+    field('product-url').value=data.product_url||'';
+    field('product-category').value=data.category||'';
+    field('product-price').value=data.price_label||'';
+    field('product-description').value=data.description||'';
+    field('product-published').checked=Boolean(data.published);
+
+    // Modular fields population
+    const pricingType=data.pricing_type||'simple';
+    const radio=document.querySelector(`input[name="pricing-type-radio"][value="${pricingType}"]`);
+    if(radio)radio.checked=true;
+    simplePricingPanel.hidden=pricingType==='options';
+    optionsPricingPanel.hidden=pricingType!=='options';
+
+    const opts=data.options_config||{};
+    field('option-group-name').value=opts.group_name||'Choose your size';
+    productOptions=Array.isArray(opts.items)?opts.items.map(i=>({name:i.name,price:i.price})):[];
+    renderOptionsList();
+
+    field('product-min-qty').value=data.min_qty||1;
+    hasPreviewCheckbox.checked=Boolean(data.has_preview);
+    previewSettingsPanel.hidden=!data.has_preview;
+    field('product-preview-type').value=data.preview_type||'magnet';
+    field('product-checkout-provider').value=data.checkout_provider||'global';
+
+    resetGallery();
+    slots=(Array.isArray(data.images)&&data.images.length?data.images:(data.image_url?[data.image_url]:[])).map(url=>({url}));
+    while(slots.length<MIN_SLOTS)slots.push(null);
+    renderGallery();
+    cancel.hidden=false;
+    setMode(true,data.title);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }else if(confirm('Delete this product?')){
+    const user=await requireUser();
+    if(!user){status.textContent=EXPIRED;showLogin(EXPIRED);return}
+    const {error}=await client.from('products').delete().eq('id',id);
+    if(error){status.textContent=`Delete failed: ${describe(error)}`;return}
+    loadProducts();
+  }
+});
+
+cancel.addEventListener('click',()=>{
+  form.reset();
+  field('product-id').value='';
+  cancel.hidden=true;
+  setMode(false);
+  resetGallery();
+  resetModularFields();
+});
+
+document.querySelector('#refresh').addEventListener('click',loadProducts);
+setMode(false);
+renderGallery();
+resetModularFields();
+showSession();

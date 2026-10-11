@@ -3,3 +3,26 @@
 #product-form.editing{border-color:#e8590c;box-shadow:0 0 0 2px rgba(232,89,12,.25)}
 .image-manager{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin:0 0 16px}.image-manager .empty{grid-column:1/-1;margin:0;padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:12px;text-align:center}.thumb-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}.thumb-card:first-child{border-color:var(--blue);box-shadow:0 0 0 2px rgba(30,58,138,.25)}.thumb-card img{display:block;width:100%;aspect-ratio:4/5;object-fit:contain;background:#fff}.thumb-badge{position:absolute;left:6px;top:6px;padding:3px 7px;border-radius:999px;background:var(--blue);color:#fff;font-size:8px;font-weight:900;letter-spacing:.8px}.thumb-actions{display:flex;border-top:1px solid var(--line)}.thumb-actions button{flex:1;padding:8px 0;border:0;background:#fff;font-size:13px;cursor:pointer}.thumb-actions button+button{border-left:1px solid var(--line)}.thumb-actions button:disabled{opacity:.3;cursor:default}.thumb-actions .danger{color:#c0392b}.img-hint{margin:-6px 0 10px;color:var(--muted);font-size:11px}.img-hint.warn{color:#b45309}
 .field-group{margin-bottom:6px}.field-title{display:block;margin-bottom:10px;color:#5e6a7c;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px}.image-manager{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}.slot{overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}.slot.cover{border:2px solid var(--blue)}.slot-pick{position:relative;display:block;margin:0;aspect-ratio:4/5;background:#fff;color:var(--blue);text-transform:none;letter-spacing:0;cursor:pointer}.slot-pick img{display:block;width:100%;height:100%;object-fit:contain}.slot-add{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:2px dashed #c3cfe6;margin:8px;border-radius:8px;background:#f7f9fe;font-size:11px;font-weight:800;text-align:center}.slot-add b{font-size:26px;line-height:1}.slot-pick:hover .slot-add{background:#eef3ff;border-color:var(--blue)}.slot .thumb-badge{z-index:1;font-size:7.5px}.slot-more{aspect-ratio:4/5;border:2px dashed #c3cfe6;border-radius:10px;background:#fff;color:var(--blue);font-size:11px;font-weight:800;cursor:pointer}.slot-more:hover{background:#eef3ff;border-color:var(--blue)}
+
+/* Modular eCommerce CMS Styles */
+.module-card{border:1px solid #dce4f0;border-radius:12px;padding:18px;background:#f8faff;margin-bottom:18px}
+.module-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #e2e8f0;padding-bottom:8px}
+.module-header .field-title{margin:0}
+.module-header small{font-size:10px;color:var(--muted);font-weight:600}
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.radio-item{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #d6ddea;border-radius:8px;padding:10px 12px;cursor:pointer;text-transform:none;letter-spacing:0;margin:0}
+.radio-item input{width:auto;margin:0}
+.radio-item span{display:grid;gap:2px}
+.radio-item b{font-size:12px;color:var(--ink)}
+.radio-item small{font-size:10px;color:var(--muted)}
+.radio-item:has(input:checked){border-color:var(--blue);background:#eef4ff}
+
+.option-items-head{display:grid;grid-template-columns:1fr 100px 40px;gap:10px;font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;padding:0 4px}
+.option-row{display:grid;grid-template-columns:1fr 100px 40px;gap:10px;align-items:center;margin-bottom:8px}
+.option-row input{padding:8px 10px;font-size:12px}
+.option-row button{padding:8px;height:38px;border-radius:6px;border:1px solid #fca5a5;background:#fff;color:#dc2626;cursor:pointer;font-weight:bold}
+.option-row button:hover{background:#fee2e2}
+.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.inline-label{margin-bottom:10px}
+#options-pricing-panel,#preview-settings-panel{margin-top:12px;padding-top:12px;border-top:1px dashed #d6ddea}
+select{width:100%;padding:11px 12px;border:1px solid #d6ddea;border-radius:8px;background:#fff;color:var(--ink);font:inherit;font-size:13px;outline:none}
